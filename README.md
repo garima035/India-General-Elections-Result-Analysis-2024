@@ -15,10 +15,17 @@ SELECT * FROM states;
 
 
 
+
+
 --- PROBLEM STATEMENT :- 01  Total Seats
+
 SELECT 
+
 DISTINCT COUNT(Parliament_Constituency)
+
 FROM constituencywise_results;
+
+
 
 --- PROBLEM STATEMENT :- 02 What is the total number of seats available for elections in each state.
 
