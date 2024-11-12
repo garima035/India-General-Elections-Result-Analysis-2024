@@ -29,11 +29,9 @@ FROM constituencywise_results;
 
 SELECT states.State AS StateName, COUNT(Constituency_ID) AS TotalSeatsAvailable
 FROM states
-JOIN 
-	statewise_results
+JOIN statewise_results
 	ON states.State_ID = statewise_results.State_ID
-JOIN 
-	constituencywise_results
+JOIN constituencywise_results
 	ON constituencywise_results.Parliament_Constituency = statewise_results.Parliament_Constituency
 GROUP BY 
 		states.State
@@ -41,6 +39,7 @@ ORDER BY
 		states.State;
 
 --- PROBLEM STATEMENT :- 03 Total Seats Won by NDA Alliance
+
 SELECT 
 	SUM(CASE
 		WHEN Party IN (
@@ -64,6 +63,7 @@ SELECT
 FROM partywise_results
 
 --- PROBLEM STATEMENT :- 04 Seats Won by NDA Alliance Party
+
 SELECT 
 	party AS PartyName,
 	won AS SeatsWon
@@ -89,6 +89,7 @@ SELECT
 ORDER BY SeatsWon DESC;
 
 --- PROBLEM STATEMENT :- 05 Total Seats Won by I.N.D.I.A Alliance Parties
+
 SELECT
 	SUM(CASE
 		WHEN Party IN (
@@ -118,6 +119,7 @@ SELECT
 FROM partywise_results;
 
 --- PROBLEM STATEMENT :- 06 Seats Won by I.N.D.I.A Alliance Parties
+
 SELECT 
 	party AS PartyName,
 	won AS SeatsWon
@@ -149,6 +151,7 @@ SELECT
 ORDER BY SeatsWon DESC;
 
 --- PROBLEM STATEMENT :- 07 Add new column field in table partywise_results to get the Party Alliance as NDA, I.N.D.I.A and OTHER
+
 ALTER TABLE partywise_results
 ADD party_alliance VARCHAR(50)
  
@@ -201,6 +204,7 @@ SET party_alliance = 'OTHER'
 WHERE party_alliance IS NULL;
 
 ---PROBLEM STATEMENT :- 08 Which party alliance (NDA, I.N.D.I.A, or OTHER) won the most seats across all states?
+
 SELECT 
 		party_alliance,
 	SUM(won) AS Total
@@ -208,6 +212,7 @@ FROM partywise_results
 GROUP BY party_alliance;
 
 ---PROBLEM STATEMENT :- 09 Winning candidate's name, their party name, total votes, and the margin of victory for a specific state and constituency?
+
 SELECT constituencywise_results.Winning_Candidate,
 	   partywise_results.Party,
 	   constituencywise_results.Total_Votes,
@@ -224,6 +229,7 @@ JOIN States
 	ON statewise_results.State_ID = States.State_ID
 
 ---PROBLEM STATEMENT :- 10 What is the distribution of EVM votes for candidates in a specific constituency ?
+
 SELECT constituencywise_details.Candidate,
 	   constituencywise_details.Party,
 	   constituencywise_details.EVM_Votes,
@@ -236,6 +242,7 @@ JOIN constituencywise_results
 ORDER BY constituencywise_details.Total_Votes DESC;
 
 ---PROBLEM STATEMENT :- 10 Which parties won the most seats in states.State, and how many seats did each party win?
+
 SELECT partywise_results.Party,
 	   COUNT(Constituency_ID) AS Seats_won
 FROM partywise_results
@@ -250,6 +257,7 @@ GROUP BY partywise_results.Party
 ORDER BY Seats_Won DESC;
 
 ---PROBLEM STATEMENT :- 11 What is the total number of seats won by each party alliance (NDA, I.N.D.I.A, and OTHER) in each state for the India Elections 2024
+
 SELECT 
     states.State AS State_Name,
     SUM(CASE WHEN partywise_results.party_alliance = 'NDA' THEN 1 ELSE 0 END) AS NDA_Seats_Won,
@@ -267,6 +275,7 @@ GROUP BY states.State
 ORDER BY states.State;
 
 ---PROBLEM STATEMENT :- 12 Which candidate received the highest number of EVM votes in each constituency (Top 10)?
+
 SELECT TOP 10
 	   constituencywise_results.Constituency_ID,
 	   constituencywise_results.Constituency_Name,
@@ -278,6 +287,7 @@ JOIN constituencywise_results
 ORDER BY constituencywise_details.EVM_Votes DESC;
 
 ---PROBLEM STATEMENT :- 13 Which candidate won and which candidate was the runner-up in each constituency of State for the 2024 elections?
+
 WITH RankedCandidates AS (
     SELECT 
         constituencywise_details.Constituency_ID,
@@ -307,6 +317,7 @@ GROUP BY constituencywise_results.Constituency_Name
 ORDER BY constituencywise_results.Constituency_Name;
 
 ---PROBLEM STATEMENT :- 14 For the state of Maharashtra, what are the total number of seats, total number of candidates, total number of parties, total votes (including EVM and postal), and the breakdown of EVM and postal votes?
+
 SELECT 
     COUNT(DISTINCT constituencywise_results.Constituency_ID) AS Total_Seats,
     COUNT(DISTINCT constituencywise_details.Candidate) AS Total_Candidates,
