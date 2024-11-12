@@ -20,9 +20,7 @@ SELECT * FROM states;
 --- PROBLEM STATEMENT :- 01  Total Seats
 
 SELECT 
-
 DISTINCT COUNT(Parliament_Constituency)
-
 FROM constituencywise_results;
 
 
